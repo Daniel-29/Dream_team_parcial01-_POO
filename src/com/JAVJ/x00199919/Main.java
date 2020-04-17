@@ -22,16 +22,16 @@ public class Main {
                     String tipo_empleado = SelectInputDialog("Seleccione el tipo de empleado a agregar:", opciones);
                     if(tipo_empleado.equals(opciones[0])){
                         //plaza fija
-                        nombres = InputDialog("Ingrese el nombre completo:");
-                        puesto = InputDialog("Ingrese el puesto:");
-                        salario = Double.parseDouble(InputDialog("Ingrese el salario:"));
-                        extension = Integer.parseInt(InputDialog("Ingrese el extension:"));
+                        nombres = InputDialog("Ingrese el nombre completo:",false);
+                        puesto = InputDialog("Ingrese el puesto:",false);
+                        salario = Double.parseDouble(InputDialog("Ingrese el salario:",true));
+                        extension = Integer.parseInt(InputDialog("Ingrese el extension:",true));
                         PlazaFija nuevo_empleado = new PlazaFija(nombres, puesto, salario, extension);
                         do{
                             documentos_msg = SelectInputDialog("Desea agregar documentos al empleado:", opciones_sino);
                             if(documentos_msg.equals(opciones_sino[0])){
-                                nombre_doc = InputDialog("Ingrese el nombre del documento");
-                                num_doc = InputDialog("Ingrese el numero del documento");
+                                nombre_doc = InputDialog("Ingrese el nombre del documento",false);
+                                num_doc = InputDialog("Ingrese el numero del documento",false);
                                 Documento nuevo_doc = new Documento(nombre_doc, num_doc);
                                 nuevo_empleado.addDocumento(nuevo_doc);
                             }
@@ -40,16 +40,16 @@ public class Main {
                         Mensaje("Se agrego corectamente.");
                     }else{
                         //servicio profesional
-                        nombres = InputDialog("Ingrese el nombre completo:");
-                        puesto = InputDialog("Ingrese el puesto:");
-                        salario = Double.parseDouble(InputDialog("Ingrese el salario:"));
-                        meses_contrato = Integer.parseInt(InputDialog("Ingrese los meses del contrato:"));
+                        nombres = InputDialog("Ingrese el nombre completo:",false);
+                        puesto = InputDialog("Ingrese el puesto:",false);
+                        salario = Double.parseDouble(InputDialog("Ingrese el salario:",true));
+                        meses_contrato = Integer.parseInt(InputDialog("Ingrese los meses del contrato:",true));
                         ServicioProfesional nuevo_empleado = new ServicioProfesional(nombres, puesto, salario, meses_contrato);
                         do{
                             documentos_msg = SelectInputDialog("Desea agregar documentos al empleado:", opciones_sino);
                             if(documentos_msg.equals(opciones_sino[0])){
-                                nombre_doc = InputDialog("Ingrese el nombre del documento");
-                                num_doc = InputDialog("Ingrese el numero del documento");
+                                nombre_doc = InputDialog("Ingrese el nombre del documento",false);
+                                num_doc = InputDialog("Ingrese el numero del documento",false);
                                 Documento nuevo_doc = new Documento(nombre_doc, num_doc);
                                 nuevo_empleado.addDocumento(nuevo_doc);
                             }
@@ -60,7 +60,7 @@ public class Main {
                     break;
 
                 case 'D':
-                    String nombre = InputDialog("Ingrese el nombre del empleado a despedir:");
+                    String nombre = InputDialog("Ingrese el nombre del empleado a despedir:",false);
                     mi_empresa.quitEmpleados(nombre);
                     Mensaje("Se despidio al empleado corectamente.");
                     break;
@@ -95,7 +95,7 @@ public class Main {
                     Mensaje(todo);
                     break;
                 case 'C':
-                    String nombre_busqueda = InputDialog("Ingrese el nombre del empleado a buscar:");
+                    String nombre_busqueda = InputDialog("Ingrese el nombre del empleado a buscar:",false);
                     Empleado empleado_calcular = null;
                     for (int i = 0; i < mi_empresa.getEmpleados().size(); i++) {
                         Empleado empleado = mi_empresa.getEmpleados().get(i);
@@ -113,7 +113,7 @@ public class Main {
                     break;
 
                 case 'M':
-                    String nombre_busqueda_totales = InputDialog("Ingrese el nombre del empleado a buscar:");
+                    String nombre_busqueda_totales = InputDialog("Ingrese el nombre del empleado a buscar:",false);
                     Empleado empleado_totales = null;
                     for (int i = 0; i < mi_empresa.getEmpleados().size(); i++) {
                         Empleado empleado = mi_empresa.getEmpleados().get(i);
@@ -142,6 +142,7 @@ public class Main {
     }
 
     public static char Menu(){
+       char r ='S';
         String[] opciones = {
                 "Agregar empleado.",
                 "Despedir empleado.",
@@ -150,16 +151,29 @@ public class Main {
                 "Mostrar totales.",
                 "Salir."
         };
-        return SelectInputDialog("MENU", opciones).charAt(0);
+        try {
+           r= SelectInputDialog("MENU", opciones).charAt(0);
+        }catch (Exception e){
+            Mensaje("Se cerro");
+        }
+        return r;
     }
 
     //como un combobox
     public static String SelectInputDialog(String mensaje, String[] opciones){
-        return (String) JOptionPane.showInputDialog(null, mensaje, "Selecione una opcion", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+        do {
+            try {
+               String r = (String) JOptionPane.showInputDialog(null, mensaje, "Selecione una opcion", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+               r.equals("");
+                return  r;
+            }catch (Exception e){
+                Mensaje("Opcion invalidad");
+            }
+        }while (true);
     }
 
     //para los inputs normales
-    public static String InputDialog(String mensaje){
+    public static String InputDialog(String mensaje,Boolean numeric){
         String[] options = {"Aceptar"};
         JPanel panel = new JPanel();
         JLabel lbl = new JLabel(mensaje);
@@ -169,7 +183,21 @@ public class Main {
         do{
             int selectedOption = JOptionPane.showOptionDialog(null, panel, "Informacion", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
             if(selectedOption == 0){
-                return txt.getText();
+                if(numeric){
+                   try {
+                     Integer.parseInt(txt.getText().trim());
+                     return txt.getText().trim();
+                   }catch (Exception e){
+                       try {
+                           Double.parseDouble(txt.getText().trim());
+                           return txt.getText().trim();
+                       }catch (Exception a){
+                           Mensaje("Entrada de datos invalida.");
+                       }
+                   }
+                }else {
+                    return txt.getText();
+                }
             }else{
                 Mensaje("Entrada de datos invalida.");
             }
