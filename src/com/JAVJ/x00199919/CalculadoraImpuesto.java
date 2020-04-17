@@ -1,9 +1,10 @@
 package com.JAVJ.x00199919;
 
-public final class CalculadorarImpuestos {
+public final class CalculadoraImpuesto {
     private static Double totalRenta = 0.0, totalISSS = 0.0 , totalAFP = 0.0;
 
-    private CalculadorarImpuestos() {
+    private CalculadoraImpuesto() {
+
     }
     public double CalcularPago(Empleado empleado){
         double pago = 0,salario=empleado.getSalario();
@@ -25,7 +26,7 @@ public final class CalculadorarImpuestos {
             }
             pago = restante - totalRenta;
         }
-     return pago;
+        return pago;
     }
     public String MostrarTotales(){
         return "Descuentos{" +
