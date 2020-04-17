@@ -10,11 +10,11 @@ public class Main {
         String[] opciones = {"Plaza fija", "Servicios profesionales"};
         String[] opciones_sino = {"SI", "NO"};
 
-        int opcion = 0;
+        char opcion = 'S';
         do{
             opcion = Menu();
             switch (opcion){
-                case 1:
+                case 'A':
                     String nombres, puesto, documentos_msg, nombre_doc, num_doc;
                     int extension, meses_contrato;
                     double salario;
@@ -59,13 +59,13 @@ public class Main {
                     }
                     break;
 
-                case 2:
+                case 'D':
                     String nombre = InputDialog("Ingrese el nombre del empleado a despedir:");
                     mi_empresa.quitEmpleados(nombre);
                     Mensaje("Se despidio al empleado corectamente.");
                     break;
 
-                case 3:
+                case 'V':
                     String todo = "";
                     String docs = "";
                     for (int i = 0; i < mi_empresa.getEmpleados().size(); i++) {
@@ -94,7 +94,7 @@ public class Main {
                     }
                     Mensaje(todo);
                     break;
-                case 4:
+                case 'C':
                     String nombre_busqueda = InputDialog("Ingrese el nombre del empleado a buscar:");
                     Empleado empleado_calcular = null;
                     for (int i = 0; i < mi_empresa.getEmpleados().size(); i++) {
@@ -112,7 +112,7 @@ public class Main {
                     }
                     break;
 
-                case 5:
+                case 'M':
                     String nombre_busqueda_totales = InputDialog("Ingrese el nombre del empleado a buscar:");
                     Empleado empleado_totales = null;
                     for (int i = 0; i < mi_empresa.getEmpleados().size(); i++) {
@@ -132,24 +132,25 @@ public class Main {
                     }
                     break;
 
-                case 6:  break;
+                case 'S':  break;
 
                 default:
                     Mensaje("Opcion invalida.");
                     break;
             }
-        }while(opcion != 6);
+        }while(opcion != 'S');
     }
 
-    public static int Menu(){
-        String msg = "MENU\n" +
-                "1) Agregar empleado.\n" +
-                "2) Despedir empleado.\n" +
-                "3) Ver lista de empleados.\n" +
-                "4) Calcular sueldo.\n" +
-                "5) Mostrar totales.\n" +
-                "6) Salir.";
-        return Integer.parseInt(JOptionPane.showInputDialog(msg));
+    public static char Menu(){
+        String[] opciones = {
+                "Agregar empleado.",
+                "Despedir empleado.",
+                "Ver lista de empleados.",
+                "Calcular sueldo.",
+                "Mostrar totales.",
+                "Salir."
+        };
+        return SelectInputDialog("MENU", opciones).charAt(0);
     }
 
     //como un combobox
@@ -159,7 +160,20 @@ public class Main {
 
     //para los inputs normales
     public static String InputDialog(String mensaje){
-        return (String) JOptionPane.showInputDialog(null, mensaje, "Informacion", JOptionPane.QUESTION_MESSAGE);
+        String[] options = {"Aceptar"};
+        JPanel panel = new JPanel();
+        JLabel lbl = new JLabel(mensaje);
+        JTextField txt = new JTextField(100);
+        panel.add(lbl);
+        panel.add(txt);
+        do{
+            int selectedOption = JOptionPane.showOptionDialog(null, panel, "Informacion", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+            if(selectedOption == 0){
+                return txt.getText();
+            }else{
+                Mensaje("Entrada de datos invalida.");
+            }
+        }while(true);
     }
 
     //para mostrar mensajes al usuario
