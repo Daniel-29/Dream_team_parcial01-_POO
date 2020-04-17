@@ -6,7 +6,7 @@ public final class CalculadoraImpuesto {
     private CalculadoraImpuesto() {
 
     }
-    public double CalcularPago(Empleado empleado){
+    public static double CalcularPago(Empleado empleado){
         double pago = 0,salario=empleado.getSalario();
         if(empleado instanceof ServicioProfesional){
             totalRenta =salario*0.1;
@@ -28,12 +28,12 @@ public final class CalculadoraImpuesto {
         }
         return pago;
     }
-    public String MostrarTotales(){
-        return "Descuentos{" +
-                " Renta:" + totalRenta +"$"+
-                ", ISSS:" + totalISSS +"$"+
-                ", AFP:=" + totalAFP +"$"+
-                '}';
+    public static String MostrarTotales(){
+        return "{" +
+                "Renta: $" + totalRenta +" USD, "+
+                "ISSS: $" + totalISSS +" USD, "+
+                "AFP: $" + totalAFP +" USD"+
+                "}";
     }
 
 }
