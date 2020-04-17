@@ -21,6 +21,7 @@ public class Empresa {
 
     public void addEmpleados(Empleado empleado) {
        empleados.add(empleado);
+
     }
     public void quitEmpleados(String nombre) {
         empleados.removeIf(e -> (e.getNombre().equals(nombre)));

@@ -30,9 +30,9 @@ public final class CalculadoraImpuesto {
     }
     public static String MostrarTotales(){
         return "{" +
-                "Renta: $" + totalRenta +" USD, "+
-                "ISSS: $" + totalISSS +" USD, "+
-                "AFP: $" + totalAFP +" USD"+
+                "Renta: $" + String.format("%.2f", totalRenta)  +" USD, "+
+                "ISSS: $" +  String.format("%.2f", totalISSS)  +" USD, "+
+                "AFP: $" + String.format("%.2f", totalAFP)  +" USD"+
                 "}";
     }
 
