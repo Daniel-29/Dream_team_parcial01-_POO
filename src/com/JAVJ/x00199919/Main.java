@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         Empresa mi_empresa = new Empresa("Dream team S.A. de C.V.");
-
+        int empledosProcesados=0;
         String[] opciones = {"Plaza fija", "Servicios profesionales"};
         String[] opciones_sino = {"SI", "NO"};
 
@@ -65,11 +65,11 @@ public class Main {
                     Mensaje("Se despidio al empleado corectamente.");
                     break;
 
-                case 'V':
+                case 'V':   
                     String todo = "";
                     String docs = "";
-                    for (int i = 0; i < mi_empresa.getEmpleados().size(); i++) {
-                        Empleado empleado = mi_empresa.getEmpleados().get(i);
+                    for (int i = 0; i < mi_empresa.getPlanilla().size(); i++) {
+                        Empleado empleado = mi_empresa.getPlanilla().get(i);
 
                         //los documentos del empleado
                         for (int j = 0; j < empleado.getDocumentos().size(); j++) {
@@ -87,7 +87,6 @@ public class Main {
                                 "\ttipo: " + (empleado instanceof ServicioProfesional ? "Servicio Profesional" : "Plaza fija") + ",\n" +
                                 "\tsalario: $"+empleado.getSalario()+" USD,\n" +
                                 "\tsalario liquido: $"+CalculadoraImpuesto.CalcularPago(empleado) + " USD,\n" +
-                                "\tdescuentos: \n"+ CalculadoraImpuesto.MostrarTotales() + "\n" +
                                 "\tdocumentos: \n"+ docs + "\n"
                                 +
                                 "}\n";
@@ -97,10 +96,9 @@ public class Main {
                 case 'C':
                     String nombre_busqueda = InputDialog("Ingrese el nombre del empleado a buscar:",false);
                     Empleado empleado_calcular = null;
-                    for (int i = 0; i < mi_empresa.getEmpleados().size(); i++) {
-                        Empleado empleado = mi_empresa.getEmpleados().get(i);
-                        if(empleado.getNombre().equals(nombre_busqueda)){
-                            empleado_calcular = empleado;
+                    for (Empleado aux : mi_empresa.getPlanilla()) {
+                        if(aux.getNombre().equals(nombre_busqueda)){
+                            empleado_calcular = aux;
                             break;
                         }
                     }
@@ -113,25 +111,15 @@ public class Main {
                     break;
 
                 case 'M':
-                    String nombre_busqueda_totales = InputDialog("Ingrese el nombre del empleado a buscar:",false);
-                    Empleado empleado_totales = null;
-                    for (int i = 0; i < mi_empresa.getEmpleados().size(); i++) {
-                        Empleado empleado = mi_empresa.getEmpleados().get(i);
-                        if(empleado.getNombre().equals(nombre_busqueda_totales)){
-                            empleado_totales = empleado;
-                            break;
+                    for (int i = empledosProcesados ; i < mi_empresa.getPlanilla().size(); i++) {
+                        Empleado empleado = mi_empresa.getPlanilla().get(i);
+                        CalculadoraImpuesto.CalcularPago(empleado);
+                        CalculadoraImpuesto.updateTotales();
+                        if(i == mi_empresa.getPlanilla().size()-1){
+                            empledosProcesados=i+1;
                         }
                     }
-                    if(empleado_totales != null){
-                        Double salario_liquido = CalculadoraImpuesto.CalcularPago(empleado_totales);
-                        String descuentos = CalculadoraImpuesto.MostrarTotales();
-
-                        Mensaje("El salario liquido es: $" + String.format("%.2f", salario_liquido) + "\nDescuentos:"+descuentos);
-                    }else{
-                        Mensaje("No ha sido encontrado ningun empleado.");
-                    }
-                    break;
-
+                    Mensaje("totales de la empresa:"+mi_empresa.getNombre()+" "+CalculadoraImpuesto.MostrarTotales());
                 case 'S':  break;
 
                 default:

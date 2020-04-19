@@ -4,26 +4,26 @@ import java.util.ArrayList;
 
 public class Empresa {
     private  String nombre;
-    private ArrayList<Empleado> empleados;
+    private ArrayList<Empleado> planilla;
 
     public Empresa(String nombre) {
         this.nombre = nombre;
-        empleados = new ArrayList<>();
+        planilla = new ArrayList<>();
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public ArrayList<Empleado> getEmpleados() {
-        return empleados;
+    public ArrayList<Empleado> getPlanilla() {
+        return planilla;
     }
 
     public void addEmpleados(Empleado empleado) {
-       empleados.add(empleado);
+       planilla.add(empleado);
 
     }
     public void quitEmpleados(String nombre) {
-        empleados.removeIf(e -> (e.getNombre().equals(nombre)));
+        planilla.removeIf(e -> (e.getNombre().equals(nombre)));
     }
 }
